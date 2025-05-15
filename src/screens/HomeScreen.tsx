@@ -1,4 +1,6 @@
 // src/screens/HomeScreen.tsx
+import CircularButton from "../components/CircularButton";
+import { Colors, Typography, Spacing, Shadows } from '../styles/theme';
 
 import React from "react";
 import {
@@ -125,15 +127,15 @@ const HomeScreen: React.FC = () => {
         </Text>
       )}
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={handleFindMidpoint}
-        disabled={
-          isLoadingMidpoint || !locationA || !locationB
-        }
-      >
-        <Text style={styles.buttonText}>Find Midpoint</Text>
-      </TouchableOpacity>
+		<View style={styles.circularButtonContainer}>
+		  <CircularButton
+			onPress={handleFindMidpoint}
+			disabled={isLoadingMidpoint || !locationA || !locationB}
+			text="Meet!"
+			size={120}
+			backgroundColor="#2ECC71"
+		  />
+		</View>
 
       {isLoadingMidpoint && <ActivityIndicator style={styles.loader} />}
 
@@ -178,15 +180,19 @@ const HomeScreen: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#F5F5F5" },
-  contentContainer: { padding: 20 },
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 24,
-    color: "#333",
-  },
+  container: { 
+  flex: 1, 
+  backgroundColor: Colors.background 
+},
+contentContainer: { 
+  padding: Spacing.m 
+},
+title: {
+  ...Typography.title,
+  textAlign: "center",
+  marginBottom: Spacing.l,
+},
+
   locationText: {
     fontSize: 14,
     color: "#555",
@@ -199,6 +205,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 10,
   },
+  circularButtonContainer: {
+  alignItems: "center",
+  justifyContent: "center",
+  marginVertical: 20,
+  },
+
   button: {
     backgroundColor: "#007AFF",
     paddingVertical: 12,

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Colors, Typography, Spacing, Shadows } from '../styles/theme';
 import {
   View,
   TextInput,
@@ -154,51 +155,59 @@ const LocationInput: React.FC<LocationInputProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 16,
+    marginBottom: Spacing.m,
   },
   inputRow: {
     flexDirection: "row",
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "#DDD",
+    borderColor: Colors.border,
     borderRadius: 8,
-    backgroundColor: "#FFF",
+    backgroundColor: Colors.cardBackground,
+    ...Shadows.small,
   },
   input: {
     flex: 1,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    fontSize: 16,
+    paddingHorizontal: Spacing.m,
+    paddingVertical: Spacing.s,
+    fontSize: Typography.body.fontSize,
+    color: Colors.textPrimary,
   },
   currentLocationButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 10,
+    paddingHorizontal: Spacing.m,
+    paddingVertical: Spacing.s,
   },
   currentLocationText: {
     fontSize: 18,
-    color: "#007AFF",
+    color: Colors.primary,
   },
   suggestionsContainer: {
     position: "absolute",
     top: 50,
     left: 0,
     right: 0,
-    backgroundColor: "#FFF",
+    backgroundColor: Colors.cardBackground,
     borderWidth: 1,
-    borderColor: "#DDD",
+    borderColor: Colors.border,
     borderRadius: 8,
     zIndex: 1000,
+    ...Shadows.medium,
   },
   suggestionItem: {
-    padding: 12,
+    padding: Spacing.m,
     borderBottomWidth: 1,
-    borderBottomColor: "#EEE",
+    borderBottomColor: Colors.border,
+  },
+  suggestionText: {
+    ...Typography.body,
+    color: Colors.textPrimary,
   },
   noSuggestionsText: {
-    padding: 12,
+    padding: Spacing.m,
     textAlign: "center",
-    color: "#777",
+    color: Colors.textTertiary,
   },
 });
+
 
 export default LocationInput;
