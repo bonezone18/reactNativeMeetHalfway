@@ -1,4 +1,3 @@
-import React from 'react';
 import { StyleSheet } from 'react-native';
 
 // Colors extracted from Flutter app
@@ -37,12 +36,12 @@ export const Colors = {
 export const Typography = {
   title: {
     fontSize: 28,
-    fontWeight: 'bold',
+    fontWeight: 'bold'as const,
     color: Colors.textPrimary,
   },
   subtitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: 'bold'as const,
     color: Colors.textPrimary,
   },
   body: {
@@ -146,7 +145,7 @@ export const CommonStyles = StyleSheet.create({
   buttonText: {
     color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '600'as const,
   },
 });
 

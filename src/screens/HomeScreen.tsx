@@ -209,6 +209,7 @@ title: {
   alignItems: "center",
   justifyContent: "center",
   marginVertical: 20,
+  ...Shadows.small,
   },
 
   button: {
