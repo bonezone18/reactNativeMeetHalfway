@@ -2,6 +2,9 @@ import React, { useRef, useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE, Region } from 'react-native-maps';
 import { Location } from '../../models/locationTypes';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { GOOGLE_MAPS_API_KEY } from '@env';
+
 
 interface MapComponentProps {
   midpoint: Location;

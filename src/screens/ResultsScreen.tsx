@@ -28,7 +28,7 @@ const ResultsScreen = () => {
     isLoading,
     error,
     searchPlaces,
-    getPhotoUrl,
+    fetchPhotoUrl,
   } = usePlaceStore();
   
   const { midpoint, setMidpoint } = useMidpointStore();
@@ -104,7 +104,7 @@ const ResultsScreen = () => {
           showMap={showMap}
           toggleMapVisibility={toggleMapVisibility}
           onPlacePress={handlePlacePress}
-          getPhotoUrl={getPhotoUrl}
+          getPhotoUrl={fetchPhotoUrl}
           onMidpointDrag={handleMidpointDrag}
         />
       )}

@@ -5,6 +5,7 @@ import * as googleMapsApi from "../../api/googleMapsApi";
 import { ApiError } from "../../api/types";
 import { MidpointCalculator } from "../../services/MidpointCalculator";
 
+
 export enum SortOption {
   distance = "distance",
   rating = "rating",
@@ -24,8 +25,8 @@ interface PlaceState {
   clearCategoryFilters: () => void;
   resetCategoryFilters: () => void;
   setSortOption: (option: SortOption) => void;
-  getPlaceSuggestions: (input: string) => Promise<PlaceSuggestion[] | ApiError>;
-  getPhotoUrl: (place: Place, maxWidth?: number) => string | null;
+  fetchPlaceSuggestions: (input: string) => Promise<PlaceSuggestion[] | ApiError>;
+  fetchPhotoUrl: (place: Place, maxWidth?: number) => string | null;
   clearError: () => void;
 }
 
@@ -77,8 +78,7 @@ export const usePlaceStore = create<PlaceState>((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       const distanceKm = MidpointCalculator.calculateDistance(locationA, locationB);
-      let radius = (distanceKm / 2 * 1000).clamp(3000.0, 50000.0); // Clamp between 3km-50km
-
+let radius = Math.min(Math.max(distanceKm / 2 * 1000, 3000.0), 50000.0); // Clamp between 3km-50km
       const currentSelectedCategories = get().selectedCategories;
       const categoriesToSearch = currentSelectedCategories.size > 0 ? Array.from(currentSelectedCategories) : Array.from(defaultCategories);
 
@@ -171,13 +171,13 @@ export const usePlaceStore = create<PlaceState>((set, get) => ({
     set({ sortOption: option, filteredPlaces: filtered });
   },
 
-  getPlaceSuggestions: async (input) => {
-    return googleMapsApi.getPlaceSuggestions(input);
+  fetchPlaceSuggestions: async (input) => {
+    return googleMapsApi.fetchPlaceSuggestions(input);
   },
 
-  getPhotoUrl: (place, maxWidth = 400) => {
+  fetchPhotoUrl: (place, maxWidth = 400) => {
     if (!place.photoReference) return null;
-    return googleMapsApi.getPhotoUrl(place.photoReference, maxWidth);
+    return googleMapsApi.fetchPhotoUrl(place.photoReference, maxWidth);
   },
   
   clearError: () => set({ error: null }),

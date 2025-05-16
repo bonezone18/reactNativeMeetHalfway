@@ -39,7 +39,7 @@ export const useLocationStore = create<LocationState>((set) => ({
   fetchCurrentLocationA: async () => {
     set({ isLoadingA: true, errorA: null });
     try {
-      const result: LocationModel | ApiError  = await GeolocationService.getCurrentLocation();
+      const result: LocationModel | ApiError  = await GeolocationService.fetchCurrentLocation();
       if ("message" in result) {
         // ApiError case
         set({ errorA: result.message, isLoadingA: false });
@@ -58,7 +58,7 @@ export const useLocationStore = create<LocationState>((set) => ({
   fetchCurrentLocationB: async () => {
     set({ isLoadingB: true, errorB: null });
     try {
-      const result = await GeolocationService.getCurrentLocation();
+      const result = await GeolocationService.fetchCurrentLocation();
       if ("message" in result) {
         set({ errorB: result.message, isLoadingB: false });
       } else {

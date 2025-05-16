@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { Colors, Typography, Spacing, Shadows } from '../styles/theme';
+import { Colors, Typography, Spacing } from '../../styles/theme';
 
 interface SortOptionsProps {
   options: Array<{label: string, value: string | number}>;

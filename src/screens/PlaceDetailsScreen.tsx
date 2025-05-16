@@ -46,7 +46,7 @@ const PlaceDetailsScreen = () => {
     const fetchDetails = async () => {
       setIsLoading(true);
       setError(null);
-      const result = await googleMapsApi.getPlaceDetails(placeId);
+      const result = await googleMapsApi.fetchPlaceDetails(placeId);
 
       if (isApiError(result)) {
         setError(result.message);
@@ -91,9 +91,9 @@ const PlaceDetailsScreen = () => {
 
   // Use the photoReference from the main Place object if available
   const mainPhotoUrl = placeDetails.photoReference 
-    ? googleMapsApi.getPhotoUrl(placeDetails.photoReference, screenWidth)
+    ? googleMapsApi.fetchPhotoUrl(placeDetails.photoReference, screenWidth)
     : placeDetails.photos?.[0]?.photo_reference // Fallback to first photo in array
-    ? googleMapsApi.getPhotoUrl(placeDetails.photos[0].photo_reference, screenWidth)
+    ? googleMapsApi.fetchPhotoUrl(placeDetails.photos[0].photo_reference, screenWidth)
     : null;
 
   return (
@@ -138,7 +138,7 @@ const PlaceDetailsScreen = () => {
             <Text style={styles.sectionTitle}>More Photos</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.photoScrollView}>
               {placeDetails.photos.map((photo, index) => {
-                const photoUrl = googleMapsApi.getPhotoUrl(photo.photo_reference, 150);
+                const photoUrl = googleMapsApi.fetchPhotoUrl(photo.photo_reference, 150);
                 return photoUrl ? <Image key={index} source={{ uri: photoUrl }} style={styles.smallPhoto} /> : null;
               })}
             </ScrollView>

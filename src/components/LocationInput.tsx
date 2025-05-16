@@ -50,7 +50,7 @@ const LocationInput: React.FC<LocationInputProps> = ({
     if (text.length > 2) {
       setIsFetching(true);
       setShowSuggestions(true);
-      const result = await googleMapsApi.getPlaceSuggestions(text);
+      const result = await googleMapsApi.fetchPlaceSuggestions(text);
       if (isApiError(result)) {
         console.error("Error fetching place suggestions:", result.message);
         setSuggestions([]);
@@ -70,7 +70,7 @@ const LocationInput: React.FC<LocationInputProps> = ({
     setShowSuggestions(false);
     Keyboard.dismiss();
 
-    const details = await googleMapsApi.getPlaceDetails(s.place_id);
+    const details = await googleMapsApi.fetchPlaceDetails(s.place_id);
     if (isApiError(details)) {
       console.error("Error fetching place details:", details.message);
       return;

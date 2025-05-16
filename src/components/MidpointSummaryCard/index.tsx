@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
-import { Colors, Typography, Spacing } from '../styles/theme';
+import { Colors, Typography, Spacing } from '../../styles/theme';
 
 interface MidpointSummaryCardProps {
   midpoint: {

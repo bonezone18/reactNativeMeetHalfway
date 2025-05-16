@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Colors, Typography, Spacing, Shadows } from '../styles/theme';
+import { View, Text, StyleSheet } from 'react-native';
+import { Colors, Typography, Spacing, Shadows } from '../../styles/theme';
 
 interface LocationInputCardProps {
   title: string;

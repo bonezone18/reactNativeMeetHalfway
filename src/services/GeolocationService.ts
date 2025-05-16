@@ -5,6 +5,7 @@ import Geolocation, {
   GeoError,
   GeoOptions,
 } from "react-native-geolocation-service";
+
 import { PermissionsAndroid, Platform } from "react-native";
 import type { Location } from "../models/locationTypes";
 import { reverseGeocode } from "../api/googleMapsApi";
@@ -43,7 +44,7 @@ export class GeolocationService {
    * Get the device’s current position, reverse-geocode it, and
    * return either a Location or an ApiError.
    */
-  static async getCurrentLocation(
+  static async fetchCurrentLocation(
     options: GeoOptions = defaultGeoOptions
   ): Promise<Location | ApiError> {
     // Android: check runtime permission first

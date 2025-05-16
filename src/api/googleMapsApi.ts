@@ -1,8 +1,8 @@
 // src/api/googleMapsApi.ts
 
+import { GOOGLE_MAPS_API_KEY } from '@env';
 import axios from "axios";
 import { Alert } from "react-native";
-import env from "../config/env";
 import { Location, Place, PlaceSuggestion } from "../models/placeTypes";
 import {
   GeocodingResponse,
@@ -13,7 +13,6 @@ import {
   ApiError,
 } from "./types";
 
-const GOOGLE_MAPS_API_KEY = env.GOOGLE_MAPS_API_KEY;
 const BASE_URL = "https://maps.googleapis.com/maps/api";
 
 const apiClient = axios.create({
@@ -150,7 +149,7 @@ export const reverseGeocode = async (
   }
 };
 
-export const getPlaceSuggestions = async (
+export const fetchPlaceSuggestions = async (
   input: string
 ): Promise<PlaceSuggestion[] | ApiError> => {
   if (!GOOGLE_MAPS_API_KEY) {
@@ -186,7 +185,7 @@ export const getPlaceSuggestions = async (
   }
 };
 
-export const getPlaceDetails = async (
+export const fetchPlaceDetails = async (
   placeId: string
 ): Promise<Place | ApiError> => {
   if (!GOOGLE_MAPS_API_KEY) {
@@ -295,7 +294,7 @@ export const searchNearbyPlaces = async (
   }
 };
 
-export const getPhotoUrl = (
+export const fetchPhotoUrl = (
   photoReference: string,
   maxWidth = 400
 ): string | null => {
@@ -307,7 +306,7 @@ export const getPhotoUrl = (
     `&photoreference=${photoReference}&key=${GOOGLE_MAPS_API_KEY}`;
 };
 
-export const getDirections = async (
+export const fetchDirections = async (
   origin: Location,
   destination: Location,
   mode = "driving"
@@ -345,7 +344,7 @@ export const getDirections = async (
   }
 };
 
-export const getStaticMapUrl = (
+export const fetchStaticMapUrl = (
   origin: Location,
   destination: Location,
   midpoint: Location,
