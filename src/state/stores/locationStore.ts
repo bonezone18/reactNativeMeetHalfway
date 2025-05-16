@@ -2,8 +2,49 @@
 
 import { create } from "zustand";
 import type { Location as LocationModel } from "../../models/locationTypes";
-import { GeolocationService } from "../../services/GeolocationService";
-import type { ApiError } from "../../api/types";
+import { PermissionsAndroid, Platform } from 'react-native';
+import Geolocation from 'react-native-geolocation-service';
+import { reverseGeocode } from "../../api/googleMapsApi";
+
+// Define GeolocationPosition type if not available
+interface GeolocationCoordinates {
+  latitude: number;
+  longitude: number;
+  altitude: number | null;
+  accuracy: number;
+  altitudeAccuracy: number | null;
+  heading: number | null;
+  speed: number | null;
+}
+
+interface GeolocationPosition {
+  coords: GeolocationCoordinates;
+  timestamp: number;
+}
+
+// Permission request function
+const requestLocationPermission = async () => {
+  if (Platform.OS === 'ios') {
+    const status = await Geolocation.requestAuthorization('whenInUse');
+    return status === 'granted';
+  }
+
+  if (Platform.OS === 'android') {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      {
+        title: "Location Permission",
+        message: "Meet Halfway needs access to your location to find places near you.",
+        buttonNeutral: "Ask Me Later",
+        buttonNegative: "Cancel",
+        buttonPositive: "OK"
+      }
+    );
+    return granted === PermissionsAndroid.RESULTS.GRANTED;
+  }
+  
+  return false;
+};
 
 export interface LocationState {
   locationA: LocationModel | null;
@@ -39,36 +80,78 @@ export const useLocationStore = create<LocationState>((set) => ({
   fetchCurrentLocationA: async () => {
     set({ isLoadingA: true, errorA: null });
     try {
-      const result: LocationModel | ApiError  = await GeolocationService.fetchCurrentLocation();
-      if ("message" in result) {
-        // ApiError case
-        set({ errorA: result.message, isLoadingA: false });
-      } else {
-        // LocationModel case
-        set({ locationA: result, isLoadingA: false });
+      // Request permission first
+      const hasPermission = await requestLocationPermission();
+      
+      if (!hasPermission) {
+        throw new Error('Location permission denied');
       }
+      
+      // Get current position
+      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+        Geolocation.fetchCurrentPosition(
+          pos => resolve(pos as GeolocationPosition),
+          error => reject(error),
+          { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+        );
+      });
+      
+      const { latitude, longitude } = position.coords;
+      
+      // Reverse geocode to get address
+      const location = await reverseGeocode(latitude, longitude);
+      
+      if ('message' in location) {
+        throw new Error(location.message);
+      }
+      
+      set({ locationA: location });
     } catch (err: any) {
+      console.error('Error getting current location:', err);
       set({
         errorA: err?.message ?? "Failed to fetch location",
-        isLoadingA: false,
       });
+    } finally {
+      set({ isLoadingA: false });
     }
   },
 
   fetchCurrentLocationB: async () => {
     set({ isLoadingB: true, errorB: null });
     try {
-      const result = await GeolocationService.fetchCurrentLocation();
-      if ("message" in result) {
-        set({ errorB: result.message, isLoadingB: false });
-      } else {
-        set({ locationB: result, isLoadingB: false });
+      // Request permission first
+      const hasPermission = await requestLocationPermission();
+      
+      if (!hasPermission) {
+        throw new Error('Location permission denied');
       }
+      
+      // Get current position
+      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+        Geolocation.fetchCurrentPosition(
+          pos => resolve(pos as GeolocationPosition),
+          error => reject(error),
+          { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+        );
+      });
+      
+      const { latitude, longitude } = position.coords;
+      
+      // Reverse geocode to get address
+      const location = await reverseGeocode(latitude, longitude);
+      
+      if ('message' in location) {
+        throw new Error(location.message);
+      }
+      
+      set({ locationB: location });
     } catch (err: any) {
+      console.error('Error getting current location:', err);
       set({
         errorB: err?.message ?? "Failed to fetch location",
-        isLoadingB: false,
       });
+    } finally {
+      set({ isLoadingB: false });
     }
   },
 
