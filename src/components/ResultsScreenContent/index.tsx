@@ -78,6 +78,7 @@ const ResultsScreenContent: React.FC<ResultsScreenContentProps> = ({
           locationB={locationB}
           height={200}
           onMidpointDrag={onMidpointDrag}
+          places={places}
         />
       )}
 

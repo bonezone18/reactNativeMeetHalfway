@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { Location } from "../../models/locationTypes";
 import * as googleMapsApi from "../../api/googleMapsApi";
-import { DirectionsResponse, ApiError } from "../../api/types";
+
 
 interface DirectionsData {
   distance: { text: string; value: number };
@@ -27,12 +27,12 @@ interface DirectionsState {
   getDirectionsFromB: (locationB: Location, destination: Location, mode?: string) => Promise<void>;
   getDirectionsUrlFromA: (locationA: Location, destination: Location, mode?: string) => string | null;
   getDirectionsUrlFromB: (locationB: Location, destination: Location, mode?: string) => string | null;
-  getStaticMapUrl: (locationA: Location, locationB: Location, meetingPlace: Location, width?: number, height?: number) => string | null;
+  fetchStaticMapUrl : (locationA: Location, locationB: Location, meetingPlace: Location, width?: number, height?: number) => string | null;
   clearDirections: () => void;
   clearError: () => void;
 }
 
-export const useDirectionsStore = create<DirectionsState>((set, get) => ({
+export const useDirectionsStore = create<DirectionsState>((set, _get) => ({
   directionsDataA: null,
   directionsDataB: null,
   isLoadingA: false,
@@ -41,7 +41,7 @@ export const useDirectionsStore = create<DirectionsState>((set, get) => ({
 
   getDirectionsFromA: async (locationA, destination, mode = "driving") => {
     set({ isLoadingA: true, error: null });
-    const result = await googleMapsApi.getDirections(locationA, destination, mode);
+    const result = await googleMapsApi.fetchDirections(locationA, destination, mode);
     if ("message" in result) { // ApiError
       set({ isLoadingA: false, error: result.message, directionsDataA: null });
     } else {
@@ -51,7 +51,7 @@ export const useDirectionsStore = create<DirectionsState>((set, get) => ({
 
   getDirectionsFromB: async (locationB, destination, mode = "driving") => {
     set({ isLoadingB: true, error: null });
-    const result = await googleMapsApi.getDirections(locationB, destination, mode);
+    const result = await googleMapsApi.fetchDirections(locationB, destination, mode);
     if ("message" in result) { // ApiError
       set({ isLoadingB: false, error: result.message, directionsDataB: null });
     } else {
@@ -69,8 +69,8 @@ export const useDirectionsStore = create<DirectionsState>((set, get) => ({
     return `https://www.google.com/maps/dir/?api=1&origin=${locationB.latitude},${locationB.longitude}&destination=${destination.latitude},${destination.longitude}&travelmode=${mode}`;
   },
   
-  getStaticMapUrl: (locationA, locationB, meetingPlace, width = 600, height = 300) => {
-    return googleMapsApi.getStaticMapUrl(locationA, locationB, meetingPlace, width, height);
+  fetchStaticMapUrl : (locationA, locationB, meetingPlace, width = 600, height = 300) => {
+    return googleMapsApi.fetchStaticMapUrl (locationA, locationB, meetingPlace, width, height);
   },
 
   clearDirections: () => set({ 

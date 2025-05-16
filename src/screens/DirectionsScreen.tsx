@@ -43,7 +43,7 @@ const DirectionsScreen = () => {
     getDirectionsFromB,
     getDirectionsUrlFromA,
     getDirectionsUrlFromB,
-    getStaticMapUrl,
+    fetchStaticMapUrl ,
     clearDirections,
     clearError: clearDirectionsError,
   } = useDirectionsStore();
@@ -91,10 +91,10 @@ const DirectionsScreen = () => {
     if (targetPlace && locationA && locationB) {
       getDirectionsFromA(locationA, targetPlace as Location);
       getDirectionsFromB(locationB, targetPlace as Location);
-      const mapUrl = getStaticMapUrl(locationA, locationB, targetPlace as Location, Math.floor(screenWidth - 40));
+      const mapUrl = fetchStaticMapUrl (locationA, locationB, targetPlace as Location, Math.floor(screenWidth - 40));
       setStaticMapUri(mapUrl);
     }
-  }, [targetPlace, locationA, locationB, getDirectionsFromA, getDirectionsFromB, getStaticMapUrl]);
+  }, [targetPlace, locationA, locationB, getDirectionsFromA, getDirectionsFromB, fetchStaticMapUrl ]);
 
   const openDirectionsInMap = (isLocationA: boolean) => {
     let url: string | null = null;

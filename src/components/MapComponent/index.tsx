@@ -2,24 +2,26 @@ import React, { useRef, useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE, Region } from 'react-native-maps';
 import { Location } from '../../models/locationTypes';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { GOOGLE_MAPS_API_KEY } from '@env';
-
+import { Place } from '../../models/placeTypes'; // <-- Add this import
 
 interface MapComponentProps {
   midpoint: Location;
-  locationA?:  Location | null;
-  locationB?:  Location | null;
+  locationA?: Location | null;
+  locationB?: Location | null;
+  places?: Place[]; // <-- Add this line
   height?: number;
   onMidpointDrag?: (newLocation: Location) => void;
+  onPlacePress?: (place: Place) => void; // <-- Optional for interactivity
 }
 
 const MapComponent: React.FC<MapComponentProps> = ({
   midpoint,
   locationA,
   locationB,
+  places = [],
   height = 200,
   onMidpointDrag,
+  onPlacePress,
 }) => {
   const mapRef = useRef<MapView>(null);
   const [region, _setRegion] = useState<Region>({
@@ -29,11 +31,8 @@ const MapComponent: React.FC<MapComponentProps> = ({
     longitudeDelta: 0.05,
   });
 
-  // Fit map to show all markers when locations change
   useEffect(() => {
     if (!mapRef.current || !locationA || !locationB) return;
-
-    // Add a small delay to ensure the map is ready
     const timer = setTimeout(() => {
       try {
         mapRef.current?.fitToCoordinates(
@@ -117,6 +116,21 @@ const MapComponent: React.FC<MapComponentProps> = ({
             pinColor="blue"
           />
         )}
+
+        {/* Place Markers */}
+        {places && places.map((place) => (
+          <Marker
+            key={place.placeId}
+            coordinate={{
+              latitude: place.latitude,
+              longitude: place.longitude,
+            }}
+            title={place.name}
+            description={place.address}
+            pinColor="#6441A5" // purple
+            onPress={() => onPlacePress && onPlacePress(place)}
+          />
+        ))}
       </MapView>
     </View>
   );

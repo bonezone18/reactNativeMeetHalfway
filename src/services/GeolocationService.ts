@@ -59,7 +59,7 @@ export class GeolocationService {
       // 2. Wrap the callback-style API in a Promise<GeoPosition>
       const pos: GeoPosition = await new Promise<GeoPosition>(
         (resolve, reject) => {
-          Geolocation.fetchCurrentPosition(
+          Geolocation.getCurrentPosition(
             (position) => resolve(position),
             (error) => reject(error),
             options

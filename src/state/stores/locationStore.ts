@@ -89,7 +89,7 @@ export const useLocationStore = create<LocationState>((set) => ({
       
       // Get current position
       const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-        Geolocation.fetchCurrentPosition(
+        Geolocation.getCurrentPosition(
           pos => resolve(pos as GeolocationPosition),
           error => reject(error),
           { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
@@ -128,7 +128,7 @@ export const useLocationStore = create<LocationState>((set) => ({
       
       // Get current position
       const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-        Geolocation.fetchCurrentPosition(
+        Geolocation.getCurrentPosition(
           pos => resolve(pos as GeolocationPosition),
           error => reject(error),
           { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
